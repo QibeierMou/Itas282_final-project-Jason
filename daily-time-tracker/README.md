@@ -16,8 +16,7 @@ The Daily Time Tracker is a simple React web application that allows users to tr
 Many students struggle with managing their time and often do not know how much time they actually spend on important daily activities.
 
 Although productivity and fitness apps already exist, many are:
-
-- Too complicated  
+  
 - Focused on only one activity  
 - Require accounts or paid subscriptions  
 
