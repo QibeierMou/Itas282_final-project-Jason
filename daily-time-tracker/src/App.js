@@ -1,4 +1,3 @@
-import React from "react";
 
 import ActivityTimer from "./components/ActivityTimer";
 function App() {

@@ -1,0 +1,14 @@
+{
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.18",
+    "eslint": "^10.0.1",
+    "vitest": "^4.0.18"
+  },
+
+  "scripts": {
+  "lint": "eslint .",
+  "test": "vitest",
+  "coverage": "vitest run --coverage",
+  "build": "vite build"
+  }
+}
