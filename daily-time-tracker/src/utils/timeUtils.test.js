@@ -8,7 +8,7 @@ describe("Time Utility Functions", () => {
   });
 
   it("subtracts two numbers", () => {
-    expect(subtract(10, 5)).toBe(6);
+    expect(subtract(10, 5)).toBe(5);
   });
 
   it("converts seconds to minutes", () => {
