@@ -1,5 +1,5 @@
-
 import ActivityTimer from "./components/ActivityTimer";
+
 function App() {
    return (
     <div>
