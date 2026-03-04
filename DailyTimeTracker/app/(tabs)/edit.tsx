@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
+import { initDatabase, loadTasks, addTask, deleteTask } from '../../database';
 
 const initialTasks = [
   { id: '1', name: '🍳 Eat Breakfast',    startTime: '7:30 AM', duration: '30' },
@@ -26,6 +27,7 @@ export default function EditScreen() {
       duration: newDuration,
     };
     setTasks([...tasks, newTask]);
+    addTask(newTask);
     setNewName('');
     setNewTime('');
     setNewDuration('');
@@ -37,7 +39,11 @@ export default function EditScreen() {
       'Are you sure you want to delete this task?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete', style: 'destructive', onPress: () => setTasks(tasks.filter(t => t.id !== id)) },
+        { text: 'Delete', style: 'destructive', onPress: () => {
+            setTasks(tasks.filter(t => t.id !== id));
+            deleteTask(id);
+          }
+        },
       ]
     );
   };
