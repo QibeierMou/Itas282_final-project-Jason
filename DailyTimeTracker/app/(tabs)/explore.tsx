@@ -4,6 +4,22 @@ import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { addTask } from '../../database';
 
+type Coordinate = {
+  latitude: number;
+  longitude: number;
+};
+
+type RouteLocation = {
+  id: string;
+  name: string;
+  address: string;
+  latitude: number;
+  longitude: number;
+  time: string;
+  activity: string;
+};
+
+
 // Sample starting locations for your daily routine
 const initialLocations = [
   {
@@ -45,17 +61,17 @@ const initialLocations = [
 ];
 
 export default function ExploreScreen() {
-  const [currentLocation, setCurrentLocation] = useState(null);
-  const [routineLocations, setRoutineLocations] = useState(initialLocations);
-  const [nextDestination, setNextDestination] = useState(routineLocations[0]);
+  const [currentLocation, setCurrentLocation] = useState<Coordinate | null>(null);
+  const [routineLocations, setRoutineLocations] = useState<RouteLocation[]>(initialLocations);
+  const [nextDestination, setNextDestination] = useState<RouteLocation>(routineLocations[0]);
   const [destinationIndex, setDestinationIndex] = useState(0);
-  const [routeCoordinates, setRouteCoordinates] = useState([]);
+  const [routeCoordinates, setRouteCoordinates] = useState<Coordinate[]>([]);
   const [distance, setDistance] = useState(null);
   const [duration, setDuration] = useState(null);
   
   // For adding custom pins
   const [showAddModal, setShowAddModal] = useState(false);
-  const [newPinLocation, setNewPinLocation] = useState(null);
+  const [newPinLocation, setNewPinLocation] = useState<Coordinate | null>(null);
   const [newPinName, setNewPinName] = useState('');
   const [newPinTime, setNewPinTime] = useState('');
   const [newPinActivity, setNewPinActivity] = useState('');
