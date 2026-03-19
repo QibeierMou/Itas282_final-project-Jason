@@ -4,7 +4,6 @@ import * as SQLite from 'expo-sqlite';
 const db = SQLite.openDatabaseSync('dailytimetracker.db');
 
 // Create tasks table if it doesn't exist
-// Example: Track activities with time ranges like "10:00 AM - 11:00 AM"
 export function initDatabase() {
   try {
     db.execSync(
@@ -34,15 +33,6 @@ export function loadTasks() {
   }
 }
 
-// Add a new task to the database
-// Example usage:
-// addTask({
-//   id: '1',
-//   name: 'Study',
-//   startTime: '10:00 AM',
-//   endTime: '11:00 AM',
-//   duration: 3600  // duration in seconds (1 hour = 3600 seconds)
-// });
 export function addTask(task) {
   try {
     const statement = db.prepareSync(

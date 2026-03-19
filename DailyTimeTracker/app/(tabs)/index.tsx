@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Vibration } from 'react-native';
 import * as Notifications from 'expo-notifications';
 
-// Tell the app how to show notifications when app is open
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -29,7 +28,7 @@ export default function HomeScreen() {
   const currentTask = TASKS[currentIndex];
   const upcomingTasks = TASKS.slice(currentIndex + 1);
 
-  // Ask for notification permission when app opens
+  // notification permission when app opens
   useEffect(() => {
     async function requestPermissions() {
       const { status } = await Notifications.requestPermissionsAsync();
