@@ -219,7 +219,7 @@ Claude AI assisted throughout the development of the Daily Time Tracker mobile a
 - Route visualization with polylines
 - Integration with Google Maps for turn-by-turn navigation
 
-**Reference:** [Conversation Link] | 2026-03-19 |
+**Reference:** [[Conversation Link](https://claude.ai/chat/48a86ae4-9690-4ded-bb5f-1f6df85caa49)] | 2026-03-19 |
 
 ### TypeScript Error Resolution
 
