@@ -1,41 +1,92 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { initDatabase, loadTasks, addTask, deleteTask } from '../../database';
 
-const initialTasks = [
-  { id: '1', name: '🍳 Eat Breakfast',    startTime: '7:30 AM', endTime: '8:00 AM', duration: '30' },
-  { id: '2', name: '🎒 Leave for School', startTime: '8:30 AM', endTime: '8:40 AM', duration: '10' },
-  { id: '3', name: '🏫 Arrive at Class',  startTime: '9:00 AM', endTime: '10:00 AM', duration: '60' },
-  { id: '4', name: '📚 Study Block',      startTime: '10:00 AM', endTime: '11:00 AM', duration: '60' },
-];
+type Task = {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  duration: number;
+};
 
 export default function EditScreen() {
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [newName, setNewName] = useState('');
   const [newStartTime, setNewStartTime] = useState('');
   const [newEndTime, setNewEndTime] = useState('');
-  const [newDuration, setNewDuration] = useState('');
+
+
+  useEffect(() => {
+    initDatabase();
+    const data = loadTasks();
+    setTasks(data);
+  }, []);
+
+    const calculateDuration = (start: string, end: string): number => {
+  try {
+    // Convert "10:30 AM" → Date object
+    const parseTime = (timeStr: string): Date => {
+      const [time, modifier] = timeStr.split(' ');
+      let [hours, minutes] = time.split(':').map(Number);
+
+      if (modifier === 'PM' && hours !== 12) {
+        hours += 12;
+      }
+      if (modifier === 'AM' && hours === 12) {
+        hours = 0;
+      }
+
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      return date;
+    };
+
+    const startDate = parseTime(start);
+    const endDate = parseTime(end);
+
+    const diffMs = endDate - startDate;
+    const diffMinutes = Math.floor(diffMs / (1000 * 60));
+
+    return diffMinutes > 0 ? diffMinutes : 0;
+  } catch (err) {
+    return 0;
+  }
+};
 
   const handleAdd = () => {
-    if (!newName || !newStartTime || !newEndTime || !newDuration) {
-      Alert.alert('Missing Info', 'Please fill in all fields!');
-      return;
-    }
-    const newTask = {
-      id: Date.now().toString(),
-      name: newName,
-      startTime: newStartTime,
-      endTime: newEndTime,
-      duration: newDuration,
-    };
-    setTasks([...tasks, newTask]);
-    addTask(newTask);
-    setNewName('');
-    setNewStartTime('');
-    setNewEndTime('');
-    setNewDuration('');
-    Alert.alert('Success', 'Task added successfully!');
+  if (!newName || !newStartTime || !newEndTime) {
+    Alert.alert('Missing Info', 'Please fill in all fields!');
+    return;
+    const result = addTask(newTask);
+    console.log('Add Task Result:', result);
+    console.log('Tasks after adding;', loadTasks());
+  }
+
+  const duration = calculateDuration(newStartTime, newEndTime);
+
+  if (duration <= 0) {
+    Alert.alert('Invalid Time', 'End time must be after start time');
+    return;
+  }
+
+  const newTask: Task = {
+    id: Date.now().toString(),
+    name: newName,
+    startTime: newStartTime,
+    endTime: newEndTime,
+    duration: duration, // ✅ auto calculated
   };
+
+  setTasks([...tasks, newTask]);
+  addTask(newTask);
+
+  setNewName('');
+  setNewStartTime('');
+  setNewEndTime('');
+
+  Alert.alert('Success', `Task added (${duration} min)`);
+};
 
   const handleDelete = (id: string) => {
     Alert.alert(
@@ -51,6 +102,8 @@ export default function EditScreen() {
       ]
     );
   };
+
+  const previewDuration = calculateDuration(newStartTime, newEndTime);
 
   return (
     <View style={styles.container}>
@@ -119,18 +172,12 @@ export default function EditScreen() {
           </View>
         </View>
 
-        {/* Duration Input */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.label}>Duration (minutes)</Text>
-          <TextInput
-            style={styles.input}
-            placeholder="e.g., 30, 45, 60"
-            value={newDuration}
-            onChangeText={setNewDuration}
-            keyboardType="numeric"
-            placeholderTextColor="#999"
-          />
-        </View>
+        {/* Duration Preview */}
+        {previewDuration > 0 && (
+          <Text style={{ marginBottom: 16, color: '#4A90E2', fontWeight: '600' }}>
+            ⏱️ Duration: {previewDuration} min
+          </Text>
+        )}
 
         {/* Example Section */}
         <View style={styles.exampleBox}>

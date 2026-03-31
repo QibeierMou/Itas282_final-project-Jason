@@ -1,6 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';  // ✅ add useCallback
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Vibration } from 'react-native';
 import * as Notifications from 'expo-notifications';
+import { useFocusEffect } from 'expo-router';                       // ✅ add this
+import { initDatabase, loadTasks } from '../../database';           // ✅ add this
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -12,21 +14,34 @@ Notifications.setNotificationHandler({
   }),
 });
 
-const TASKS = [
-  { id: '1', name: '🍳 Eat Breakfast',    startTime: '7:30 AM', duration: 1 },
-  { id: '2', name: '🎒 Leave for School', startTime: '8:30 AM', duration: 1 },
-  { id: '3', name: '🏫 Arrive at Class',  startTime: '9:00 AM', duration: 1 },
-  { id: '4', name: '📚 Study Block',      startTime: '10:00 AM', duration: 1 },
-];
+type Task = {
+  id: string;
+  name: string;
+  startTime: string;
+  endTime: string;
+  duration: number;
+};
 
 export default function HomeScreen() {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [secondsLeft, setSecondsLeft] = useState(TASKS[0].duration * 60);
-  const notificationListener = useRef<string>('');
-  const [isPaused, setIsPaused] = useState(false);
 
-  const currentTask = TASKS[currentIndex];
-  const upcomingTasks = TASKS.slice(currentIndex + 1);
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(0);
+
+  // ✅ useFocusEffect reloads tasks every time you navigate to this tab
+  useFocusEffect(
+    useCallback(() => {
+      initDatabase();
+      const data = loadTasks();
+      console.log(' HomeScreen data loaded:', JSON.stringify(data));
+      if (data && data.length > 0) {
+        setTasks(data);
+        setCurrentIndex(0);
+        setSecondsLeft(data[0].duration * 60);
+      }
+    }, [])
+  );
 
   // notification permission when app opens
   useEffect(() => {
@@ -39,94 +54,97 @@ export default function HomeScreen() {
     requestPermissions();
   }, []);
 
-  // Schedule a notification for the next task
-  async function scheduleNextTaskNotification(taskName: string) {
-    // Vibrate the phone - pattern is [wait, vibrate, wait, vibrate]
-    Vibration.vibrate([0, 500, 200, 500]);
+  // Countdown timer
+  useEffect(() => {
+    if (isPaused || tasks.length === 0) return;
+    const timer = setInterval(() => {
+      setSecondsLeft(prev => {
+        if (prev <= 1) {
+          const nextIndex = Math.min(currentIndex + 1, tasks.length - 1);
+          setCurrentIndex(nextIndex);
+          return tasks[nextIndex].duration * 60;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [currentIndex, isPaused, tasks]);
 
+  // Reset timer when task changes
+  useEffect(() => {
+    if (tasks.length > 0) {
+      setSecondsLeft(tasks[currentIndex].duration * 60);
+    }
+  }, [currentIndex]);
+
+  // Guard: don't render until tasks are loaded
+  if (tasks.length === 0) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.header}>Daily Time Tracker</Text>
+        <Text style={styles.subheader}>No tasks yet — add some in the Edit tab!</Text>
+      </View>
+    );
+  }
+
+  const currentTask = tasks[currentIndex];
+  const upcomingTasks = tasks.slice(currentIndex + 1);
+
+  async function scheduleNextTaskNotification(taskName: string) {
+    Vibration.vibrate([0, 500, 200, 500]);
     await Notifications.scheduleNotificationAsync({
       content: {
         title: '⏰ Time for your next task!',
         body: `Up next: ${taskName}`,
         sound: true,
       },
-      trigger: { 
-        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL, 
-        seconds: 10, 
-        repeats: false 
+      trigger: {
+        type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+        seconds: 10,
+        repeats: false
       },
     });
   }
-
-  // Countdown timer
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = setInterval(() => {
-      setSecondsLeft(prev => {
-        if (prev <= 1) {
-          const nextIndex = Math.min(currentIndex + 1, TASKS.length - 1);
-          setCurrentIndex(nextIndex);
-          return TASKS[nextIndex].duration * 60;
-        }
-        return prev - 1;
-      });
-   }, 1000);
-    return () => clearInterval(timer);
-  }, [currentIndex, isPaused]);
-
-  // Reset timer when task changes
-  useEffect(() => {
-    setSecondsLeft(TASKS[currentIndex].duration * 60);
-  }, [currentIndex]);
 
   const minutes = Math.floor(secondsLeft / 60);
   const seconds = secondsLeft % 60;
   const progress = 1 - secondsLeft / (currentTask.duration * 60);
 
   const handleDone = () => {
-    if (currentIndex < TASKS.length - 1) {
-      const nextTask = TASKS[currentIndex + 1];
+    if (currentIndex < tasks.length - 1) {
+      const nextTask = tasks[currentIndex + 1];
       scheduleNextTaskNotification(nextTask.name);
       setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handleSkip = () => {
-    if (currentIndex < TASKS.length - 1) {
+    if (currentIndex < tasks.length - 1) {
       setCurrentIndex(currentIndex + 1);
     }
   };
 
   return (
     <View style={styles.container}>
-
-      {/* Header */}
       <Text style={styles.header}>Daily Time Tracker</Text>
       <Text style={styles.subheader}>School Day Routine</Text>
 
-      {/* Current Task */}
       <View style={styles.currentTaskBox}>
         <Text style={styles.nowLabel}>NOW</Text>
         <Text style={styles.taskName}>{currentTask.name}</Text>
         <Text style={styles.timer}>
           {String(minutes).padStart(2, '0')}:{String(seconds).padStart(2, '0')}
         </Text>
-
-        {/* Progress Bar */}
         <View style={styles.progressBarBackground}>
           <View style={[styles.progressBarFill, { width: `${progress * 100}%` }]} />
         </View>
       </View>
 
-      {/* Buttons */}
       <View style={styles.buttonRow}>
         <TouchableOpacity style={styles.doneButton} onPress={handleDone}>
           <Text style={styles.buttonText}>✅ Mark Done</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          style={[styles.pauseButton]}
-          onPress={() => setIsPaused(!isPaused)}
-        >
+        <TouchableOpacity style={styles.pauseButton} onPress={() => setIsPaused(!isPaused)}>
           <Text style={styles.buttonText}>{isPaused ? '▶️ Resume' : '⏸️ Pause'}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.skipButton} onPress={handleSkip}>
@@ -134,7 +152,6 @@ export default function HomeScreen() {
         </TouchableOpacity>
       </View>
 
-      {/* Upcoming Tasks */}
       <Text style={styles.upcomingLabel}>UPCOMING</Text>
       <FlatList
         data={upcomingTasks}
@@ -146,7 +163,6 @@ export default function HomeScreen() {
           </View>
         )}
       />
-
     </View>
   );
 }

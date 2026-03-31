@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, ScrollView, Linking, Platform, TextInput, Modal } from 'react-native';
 import MapView, { Marker, Polyline, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import { addTask } from '../../database';
+import { initDatabase } from '../../database';
 
 type Coordinate = {
   latitude: number;
@@ -93,6 +94,10 @@ export default function ExploreScreen() {
     })();
   }, []);
 
+useEffect(() => {
+  initDatabase();
+} , []);
+
   // Calculate distance between two points (Haversine formula)
   const calculateDistance = (lat1, lon1, lat2, lon2) => {
     const R = 6371; // Earth's radius in km
@@ -117,7 +122,7 @@ export default function ExploreScreen() {
         nextDestination.longitude
       );
       setDistance(dist);
-      
+       
       // Estimate duration (assuming 5 km/h walking or 40 km/h driving)
       const durationMin = Math.round((parseFloat(dist) / 5) * 60); // walking
       setDuration(durationMin);
