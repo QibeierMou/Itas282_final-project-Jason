@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: daily-time-tracker
+        working-directory: DailyTimeTracker
 
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: daily-time-tracker/package-lock.json
+          cache-dependency-path: DailyTimeTracker/package-lock.json
 
       - run: npm ci
       - run: npm run lint
@@ -29,7 +29,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: lint-report
-          path: daily-time-tracker
+          path: DailyTimeTracker
           retention-days: 28
 
 
@@ -38,7 +38,7 @@ jobs:
     needs: lint
     defaults:
       run:
-        working-directory: daily-time-tracker
+        working-directory: DailyTimeTracker
 
     steps:
       - uses: actions/checkout@v4
@@ -47,7 +47,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: daily-time-tracker/package-lock.json
+          cache-dependency-path: DailyTimeTracker/package-lock.json
 
       - run: npm ci
       - run: npm run coverage
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: daily-time-tracker/coverage
+          path: DailyTimeTracker/coverage
           retention-days: 28
 
 
@@ -64,7 +64,7 @@ jobs:
     needs: lint
     defaults:
       run:
-        working-directory: daily-time-tracker
+        working-directory: DailyTimeTracker
 
     steps:
       - uses: actions/checkout@v4
@@ -73,7 +73,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: daily-time-tracker/package-lock.json
+          cache-dependency-path: DailyTimeTracker/package-lock.json
 
       - run: npm ci
       - run: npm audit --audit-level=moderate || true
@@ -81,7 +81,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: security-report
-          path: daily-time-tracker
+          path: DailyTimeTracker
           retention-days: 28
 
 
@@ -90,7 +90,7 @@ jobs:
     needs: [test, security]
     defaults:
       run:
-        working-directory: daily-time-tracker
+        working-directory: DailyTimeTracker
 
     steps:
       - uses: actions/checkout@v4
@@ -99,7 +99,7 @@ jobs:
         with:
           node-version: 20
           cache: 'npm'
-          cache-dependency-path: daily-time-tracker/package-lock.json
+          cache-dependency-path: DailyTimeTracker/package-lock.json
 
       - run: npm ci
       - run: npm run build
@@ -107,7 +107,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: build-files
-          path: daily-time-tracker/build
+          path: DailyTimeTracker/build
           retention-days: 28
 
 
@@ -119,5 +119,5 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-files
-          path: daily-time-tracker/build
+          path: DailyTimeTracker/build
       - run: echo "Deploying application..."
