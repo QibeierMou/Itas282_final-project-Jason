@@ -351,7 +351,7 @@ export default function ExploreScreen() {
 
       {/* All Destinations List */}
       <View style={styles.destinationsList}>
-        <Text style={styles.listTitle}>Today's Route ({routineLocations.length} stops)</Text>
+        <Text style={styles.listTitle}>Today&apos;s Route ({routineLocations.length} stops)</Text>
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           {routineLocations.map((loc, index) => (
             <TouchableOpacity
