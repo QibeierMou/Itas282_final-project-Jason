@@ -1,6 +1,7 @@
 import React from 'react';
+import { describe, it, expect } from '@jest/globals';
 import { render } from '@testing-library/react-native';
-import IndexScreen from '../../app/(tabs)/explore';
+import ExploreScreen from '../../app/(tabs)/explore';
 /* ================= MOCKS ================= */
 
 // Mock react-native Platform properly
