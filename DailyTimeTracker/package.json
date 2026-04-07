@@ -49,6 +49,7 @@
   "devDependencies": {
     "@cucumber/cucumber": "^12.7.0",
     "@testing-library/jest-native": "^5.4.3",
+    "@testing-library/react": "^16.3.2",
     "@testing-library/react-native": "^13.3.3",
     "@types/react": "~19.1.0",
     "cross-env": "^10.1.0",
@@ -64,11 +65,16 @@
     "preset": "jest-expo",
     "testMatch": [
       "**/DailyTimeTracker/tests/**/*.test.[jt]s?(x)",
-    "**/daily-time-tracker/src/**/*.test.[jt]s?(x)"
-  ],
-  "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
-  "transformIgnorePatterns": [
-    "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
-  ]
-}
+      "**/daily-time-tracker/src/**/*.test.[jt]s?(x)"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
+    "transformIgnorePatterns": [
+      "node_modules/(?!((jest-)?react-native|@react-native(-community)?)|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|react-navigation|@react-navigation/.*|@unimodules/.*|unimodules|sentry-expo|native-base|react-native-svg)"
+    ]
+  }
 }
