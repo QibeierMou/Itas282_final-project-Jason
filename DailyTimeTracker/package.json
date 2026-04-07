@@ -11,8 +11,8 @@
     "lint": "expo lint",
     "test": "jest",
     "coverage": "jest --coverage",
-    "bdd": "cucumber-js",
-    "ui-test": "playwright test",
+    "test:bdd": "cucumber-js",
+    "test:ui": "playwright test",
     "test:add": "jest --coverage"
   },
   "dependencies": {
