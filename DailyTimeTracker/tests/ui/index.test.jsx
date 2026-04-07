@@ -1,5 +1,5 @@
 import React from 'react';
-import { describe, it, expect } from '@jest/globals';
+import { describe, it, expect } from 'vitest';
 import { render } from '@testing-library/react-native';
 import IndexScreen from '../../app/(tabs)/index';
 // Mock navigation if used
