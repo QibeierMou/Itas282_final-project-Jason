@@ -13,4 +13,9 @@ export default defineConfig({
     },
   },
   root: '../',
+  resolve: {
+    alias: {
+        'react-native': '@testing-library/react-native/src/index.ts'
+    }
+  }
 });
