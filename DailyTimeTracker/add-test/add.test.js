@@ -1,4 +1,4 @@
-import { calculateDuration, validateTask } from '../../utils/businessLogic';
+import { calculateDuration, validateTask } from '../utils/businessLogic';
 
 describe('ADD - Time Calculation', () => {
 
