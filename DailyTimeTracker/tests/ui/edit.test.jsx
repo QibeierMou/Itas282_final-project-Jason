@@ -1,4 +1,5 @@
 import React from 'react';
+import { describe, it, expect } from '@jest/globals';
 import { render } from '@testing-library/react-native';
 import EditScreen from '../../app/(tabs)/edit';
 // Mock router if used
