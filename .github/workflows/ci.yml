@@ -14,12 +14,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
-      - run:  cd DailyTimeTracker && npm test
-        env:
-          CI: true
-          NODE_ENV: test
+      - name: Install root dependencies
+        run: npm ci
 
       - name: Run UI tests
         run: npm test
@@ -36,11 +33,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
       - run: npm ci
 
-      - run: npm run bdd
+      - run: cd DailyTimeTracker && npm ci
+
+      - run: cd DailyTimeTracker && npm run bdd
 
   add-tests:
     runs-on: ubuntu-latest
@@ -51,17 +49,18 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
       - run: npm ci
 
-      - run: npm run test:add -- --coverage
+      - run: cd DailyTimeTracker && npm ci
+
+      - run: cd DailyTimeTracker && npm run test:add -- --coverage
 
       - name: Upload ADD report
         uses: actions/upload-artifact@v4
         with:
           name: add-report
-          path: coverage/
+          path: DailyTimeTracker/coverage/
           retention-days: 28
 
   build:
@@ -73,7 +72,6 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 18
-          cache: 'npm'
 
       - run: npm ci
 
