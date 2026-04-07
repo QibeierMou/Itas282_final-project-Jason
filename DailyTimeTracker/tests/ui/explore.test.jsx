@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-
+import IndexScreen from '../../app/(tabs)/explore';
 /* ================= MOCKS ================= */
 
 // Mock react-native Platform properly
@@ -36,10 +36,6 @@ jest.mock('expo-router', () => ({
     push: jest.fn(),
   }),
 }));
-
-/* ================= IMPORT ================= */
-
-import ExploreScreen from '../../app/(tabs)/explore';
 
 /* ================= TEST ================= */
 

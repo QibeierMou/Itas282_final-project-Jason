@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-
+import IndexScreen from '../../app/(tabs)/index';
 // Mock navigation if used
 jest.mock('expo-router', () => ({
   useRouter: () => ({
@@ -14,9 +14,6 @@ jest.mock('expo-notifications', () => ({
     Promise.resolve({ status: 'granted' })
   ),
 }));
-
-// Import your screen (adjust path if needed)
-import IndexScreen from '../../app/(tabs)/index';
 
 describe('Index Screen', () => {
   it('renders correctly', () => {
