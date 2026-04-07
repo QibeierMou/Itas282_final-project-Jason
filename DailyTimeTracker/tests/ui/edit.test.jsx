@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react-native';
-
+import EditScreen from '../../app/(tabs)/edit';
 // Mock router if used
 jest.mock('expo-router', () => ({
   useRouter: () => ({
@@ -16,9 +16,6 @@ jest.mock('expo-sqlite', () => ({
     getFirstAsync: jest.fn(() => null),
   })),
 }));
-
-// Import your edit screen (adjust path if needed)
-import EditScreen from '../../app/(tabs)/edit';
 
 describe('Edit Screen', () => {
   it('renders correctly', () => {
