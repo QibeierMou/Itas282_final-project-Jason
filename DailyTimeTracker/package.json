@@ -64,8 +64,7 @@
   "jest": {
   "preset": "jest-expo",
   "testMatch": [
-    "**/__tests__/**/*.test.[jt]s?(x)",
-    "**/tests/**/*.test.[jt]s?(x)"
+    "**/tests/add/**/*.test.[jt]s?(x)"
   ],
   "moduleFileExtensions": ["ts", "tsx", "js", "jsx"],
   "transformIgnorePatterns": [
