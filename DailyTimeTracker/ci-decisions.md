@@ -109,11 +109,12 @@ We chose **Cucumber.js** because it provides strong Gherkin support and aligns w
 
 | Tool | Pros | Cons |
 |------|------|------|
-| Jest | Fast and modern | Learning curve |
-| Selenium | Very popular | Slower and complex |
+| Jest + jest-expo | Built for React Native/Expo, integrates with existing setup | Cannot run on CI without proper mocks |
+| Vitest | Fast, modern, works well in Node/jsdom environment | Cannot parse React Native Flow types |
+| Playwright | Great for web browser automation | Not compatible with React Native mobile apps |
 
 ### Decision
-We chose **Playwright** because it is fast and works well with modern web applications.
+We chose **Jest** (via jest-expo) for unit and integration tests of our React Native components and business logic, and **Vitest** for lightweight UI logic tests that run in CI. Playwright was not chosen because our app is a React Native mobile application, not a web app.
 
 ---
 
