@@ -12,7 +12,6 @@
     "test": "jest",
     "coverage": "jest --coverage",
     "test:bdd": "cucumber-js",
-    "test:ui": "playwright test",
     "test:add": "jest --coverage"
   },
   "dependencies": {
