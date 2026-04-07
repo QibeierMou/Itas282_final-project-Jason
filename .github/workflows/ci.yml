@@ -16,7 +16,7 @@ jobs:
           node-version: 20
 
       - name: Install root dependencies
-        run: npm ci
+        run: rm -rf node_modules package-lock.json && npm install
 
       - name: Run UI tests
         run: npm test
@@ -34,7 +34,7 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - run: rm -rf node_modules package-lock.json && npm install
 
       - run: cd DailyTimeTracker && npm ci
 
@@ -50,7 +50,7 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - run: rm -rf node_modules package-lock.json && npm install
 
       - run: cd DailyTimeTracker && npm ci
 
@@ -73,7 +73,7 @@ jobs:
         with:
           node-version: 20
 
-      - run: npm ci
+      - run: rm -rf node_modules package-lock.json && npm install
 
       - run: npm run build
 
