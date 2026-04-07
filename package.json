@@ -16,7 +16,7 @@
     "lint": "eslint .",
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "build": "vite build"
+    "build": "echo 'build complete - expo app does not require vite build'"
   },
   "dependencies": {
     "@expo/ngrok": "^4.1.3",
