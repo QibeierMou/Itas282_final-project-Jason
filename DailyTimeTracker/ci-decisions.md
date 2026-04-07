@@ -109,7 +109,7 @@ We chose **Cucumber.js** because it provides strong Gherkin support and aligns w
 
 | Tool | Pros | Cons |
 |------|------|------|
-| Playwright | Fast and modern | Learning curve |
+| Jest | Fast and modern | Learning curve |
 | Selenium | Very popular | Slower and complex |
 
 ### Decision
