@@ -13,7 +13,8 @@
     "coverage": "jest --coverage",
     "bdd": "cucumber-js",
     "ui-tests": "echo \"UI tests run locally on emulator\"",
-    "test:add": "jest --coverage"
+    "test:add": "jest --coverage",
+    "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx ."
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
