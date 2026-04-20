@@ -8,7 +8,7 @@ jobs:
 
   # Step 1: Check dependencies for vulnerabilities
   sca-scan:
-    name: Check Dependencies
+    name: SCA Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -33,7 +33,7 @@ jobs:
 
   # Step 2: Check code for security issues
   sast-scan:
-    name: Check Code Security
+    name: SAST Scan
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -143,13 +143,13 @@ jobs:
 
   # Step 7: Security scan the built app
   dast-scan:
-    name: Check Built App Security
+    name: DAST Scan
     runs-on: ubuntu-latest
     needs: build
     steps:
       - uses: actions/checkout@v4
 
-      - name: Security scan
+      - name: DAST Security Scan
         run: |
           echo "DAST Security Scan - $(date)" > dast-report.txt
           echo "" >> dast-report.txt
